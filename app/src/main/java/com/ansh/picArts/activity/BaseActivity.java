@@ -1,5 +1,6 @@
 package com.ansh.picArts.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,25 +19,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
-import androidx.annotation.LayoutRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.ansh.picArts.R;
 
@@ -250,6 +249,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
+    public boolean isWritePermission() {
+        return checkPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
+    }
 
     public boolean checkPermission(String[] permission, int permissionCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -402,8 +404,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         return inSampleSize;
     }
-
-
 
 
     public SpannableString setSpan(String text, String boldText) {

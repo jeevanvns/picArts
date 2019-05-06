@@ -1,5 +1,6 @@
 package com.ansh.picArts.activity;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.Menu;
@@ -42,7 +43,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        if (!isWritePermission()) {
+            selfPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+        }
     }
 
     @Override

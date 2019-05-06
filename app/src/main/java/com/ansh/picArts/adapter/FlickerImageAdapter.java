@@ -17,8 +17,11 @@ import com.ansh.picArts.R;
 import com.ansh.picArts.activity.MainActivity;
 import com.ansh.picArts.adapter.FlickerImageAdapter.ImageViewHolder;
 import com.ansh.picArts.fragment.FlickerImagePagerFragment;
+import com.ansh.picArts.imageCache.ImageLoader;
 import com.ansh.picArts.resource.response.FlickerImageResponse;
+import com.ansh.picArts.utils.AppConstant;
 import com.ansh.picArts.utils.FlickerUtils;
+import com.ansh.picArts.utils.PreferencesUtils;
 import com.ansh.picArts.utils.ScreenUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -176,23 +179,29 @@ public class FlickerImageAdapter extends RecyclerView.Adapter<ImageViewHolder> {
         }
 
         void setImage(final int adapterPosition, String url) {
-            Picasso.get()
-                    .load(url)
-                    .placeholder(R.drawable.ani_loader)
-                    .error(R.drawable.no_image)
-                    .centerCrop()
-                    .resize(getWidth(columnCount), getHeight(columnCount))
-                    .into(image, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            viewHolderListener.onLoadCompleted(image, adapterPosition);
-                        }
+            if (PreferencesUtils.getInteger(AppConstant.CACHE_TYPE) == AppConstant.CACHE_CUSTOM) {
+                ImageLoader imageLoader = new ImageLoader(image.getContext(), ".picArts");
+                imageLoader.DisplayImage(url, image);
+                viewHolderListener.onLoadCompleted(image, adapterPosition);
+            } else {
+                Picasso.get()
+                        .load(url)
+                        .placeholder(R.drawable.ani_loader)
+                        .error(R.drawable.no_image)
+                        .centerCrop()
+                        .resize(getWidth(columnCount), getHeight(columnCount))
+                        .into(image, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                viewHolderListener.onLoadCompleted(image, adapterPosition);
+                            }
 
-                        @Override
-                        public void onError(Exception e) {
-                            viewHolderListener.onLoadCompleted(image, adapterPosition);
-                        }
-                    });
+                            @Override
+                            public void onError(Exception e) {
+                                viewHolderListener.onLoadCompleted(image, adapterPosition);
+                            }
+                        });
+            }
         }
 
         @Override

@@ -17,4 +17,11 @@
         android:id="@+id/menu_gird_item_4"
         android:title="@string/_4_grid_item" />
 
+    <item
+        android:id="@+id/menu_picasso"
+        android:title="@string/picasso_cache" />
+    <item
+        android:id="@+id/menu_custom_cache"
+        android:title="@string/custom_cache" />
+
 </menu>

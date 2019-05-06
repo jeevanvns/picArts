@@ -1,6 +1,7 @@
 
 package com.ansh.picArts.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ansh.picArts.R;
+import com.ansh.picArts.activity.BaseActivity;
 import com.ansh.picArts.activity.MainActivity;
 import com.ansh.picArts.adapter.FlickerImageAdapter;
 import com.ansh.picArts.enums.flicker.FApiType;
@@ -37,6 +39,7 @@ import com.ansh.picArts.resource.response.FlickerImageResponse;
 import com.ansh.picArts.resource.service.FlickerImageService;
 import com.ansh.picArts.utils.AppConstant;
 import com.ansh.picArts.utils.EndlessRecyclerViewScrollListener;
+import com.ansh.picArts.utils.PreferencesUtils;
 import com.ansh.picArts.web.ApiCallback;
 import com.ansh.picArts.web.ApiException;
 
@@ -160,19 +163,40 @@ public class HomeGridFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_gird_item_2:
                 itemCount = 2;
+                bindRecyclerView(itemCount);
                 break;
             case R.id.menu_gird_item_3:
                 itemCount = 3;
+                bindRecyclerView(itemCount);
                 break;
             case R.id.menu_gird_item_4:
                 itemCount = 4;
+                bindRecyclerView(itemCount);
+                break;
+            case R.id.menu_picasso:
+                PreferencesUtils.putInteger(AppConstant.CACHE_TYPE, AppConstant.CACHE_PICASSO);
+                Toast.makeText(getContext(), "Reopen the app for check Picasso Cache", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_custom_cache:
+                if (((BaseActivity) getActivity()).isWritePermission()) {
+                    PreferencesUtils.putInteger(AppConstant.CACHE_TYPE, AppConstant.CACHE_CUSTOM);
+                    Toast.makeText(getContext(), "Reopen the app for check Custom Cache", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Write External Storage permission not granted", Toast.LENGTH_SHORT).show();
+                    ((BaseActivity) getActivity()).selfPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
+
+                }
                 break;
         }
-        bindRecyclerView(itemCount);
         return super.onOptionsItemSelected(item);
     }
 
 
+    /**
+     * Bind RecyclerView Layout Manger Dynamic based on column count
+     * @param i
+     * @link bindRecyclerView
+     */
     private void bindRecyclerView(int i) {
         gridLayoutManager = new GridLayoutManager(getContext(), i);
         rvImageList.setLayoutManager(gridLayoutManager);
@@ -186,7 +210,7 @@ public class HomeGridFragment extends Fragment {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (!TextUtils.isEmpty(keyword))
-                searchImage(keyword, counter, false);
+                    searchImage(keyword, counter, false);
             }
         });
     }
