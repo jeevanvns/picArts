@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">PicArts</string>
+    <string name="image_description">Image</string>
+    <string name="_2_grid_item">2 Grid Item</string>
+    <string name="search">Search</string>
+    <string name="_3_grid_item">3 Grid Item</string>
+    <string name="_4_grid_item">4 Grid Item</string>
+</resources>
