@@ -13,5 +13,9 @@ public class AppConstant {
     public static final String KEY_IMAGE_RES = "com.ansh.picArts.key.imageRes";
     public static final String KEY_CURRENT_POSITION = "com.ansh.picArts.key.currentPosition";
     public static final String FLICKER_API_KEY = "30a4b55f9bed0446e6c492b5bf88123c";
+    public static final int CACHE_PICASSO = 0;
+    public static final int CACHE_CUSTOM = 1;
+    public static final String CACHE_TYPE = "cache_type";
+
 
 }
